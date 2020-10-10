@@ -297,10 +297,15 @@ function LoadMachineToModal()
                 //adjust later
                 //alert("fetch data error")
                 RefreshArr();
-                var dataPlcErrJson = JSON.parse(result.plc);
+                if (result.plc.length > 0) {
+                    var dataPlcErrJson = JSON.parse(result.plc);
+                    ShowToast(2, "Không gửi được PLC máy " + dataPlcErrJson[0].toString().trim() + ". Vui lòng thao tác lại");
+                    ShowToast(2, "ret = " + result.error + "rcv = " + result.dataErr);
+                    $('#ModalMachine').modal('hide');
+                    return;
+                }
                 $('#ModalMachine').modal('hide');
-                ShowToast(2, "Không gửi được PLC máy " + dataPlcErrJson[0].toString().trim() + ". Vui lòng thao tác lại");
-
+                ShowToast(2, "Error = " + result.error);
                 return;
             }
             RefreshArr(); //refresh here
