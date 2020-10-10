@@ -1,0 +1,234 @@
+﻿@{ ViewData["Title"] = "Home Page"; @* Layout=""; *@ }
+<link rel="stylesheet" href="~/css/InputDefect/InputDefect.css" />
+
+<div class="ipd-container">
+    
+    <div class="header">
+        <h1>Defective Update System</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <form>
+                <fieldset>
+                    <legend><i class="fas fa-info ipd-icon"></i>Thông tin dữ liệu</legend>
+                    @* 1. Barcode *@
+                    <div class="ipd-form-group row">
+                        <label class="col-sm-6 col-form-label ipd-label">Barcode</label>
+                        <div class="col-sm-6 pl-0">
+                            <input class="form-control" id="txtBarcode" type="text" style="text-transform: uppercase;" autocomplete="off"/>
+                        </div>
+                    </div>
+                    @* 2. Job No *@
+                    <div class="ipd-form-group row">
+                        <label class="col-sm-6 col-form-label ipd-label">Job No</label>
+                        <div class="col-sm-6 pl-0">
+                            <input class="form-control ipd-bg-info" id="txtJobOrderNo" type="text" disabled />
+                        </div>
+                    </div>
+                    @* 3. Lot No *@
+                    <div class="ipd-form-group row">
+                        <label class="col-sm-6 col-form-label ipd-label">Lot No</label>
+                        <div class="col-sm-6 pl-0">
+                            <input class="form-control ipd-bg-info" id="txtLotNo" type="text" disabled />
+                        </div>
+                    </div>
+                    @* 4. Item Code *@
+                    <div class="ipd-form-group row">
+                        <label class="col-sm-6 col-form-label ipd-label">Item Code</label>
+                        <div class="col-sm-6 pl-0">
+                            <input class="form-control ipd-bg-info" id="txtItemCode" type="text" disabled />
+                        </div>
+                    </div>
+                    @* 5. Ngày sản xuất *@
+                    <div class="ipd-form-group row">
+                        <label class="col-sm-6 col-form-label ipd-label">Ngày sản xuất</label>
+                        <div class="col-sm-6 pl-0">
+                            <input class="form-control ipd-bg-info" id="txtStartDate" type="text" disabled />
+                        </div>
+                    </div>
+                    @* 6. Ngày kết thúc *@
+                    <div class="ipd-form-group row">
+                        <label class="col-sm-6 col-form-label ipd-label">Ngày kết thúc</label>
+                        <div class="col-sm-6 pl-0">
+                            <input class="form-control ipd-bg-info" id="txtEndDate" type="text" disabled />
+                        </div>
+                    </div>
+                    @* 7. Mã số thiết bị/bàn *@
+                    <div class="ipd-form-group row">
+                        <label class="col-sm-6 col-form-label ipd-label">Mã số thiết bị/bàn</label>
+                        <div class="col-sm-6 pl-0">
+                            <input class="form-control ipd-bg-info" id="txtMachineNo" type="text" disabled />
+                        </div>
+                    </div>
+                    @* 8. Chọn công đoạn *@
+                    <div class="ipd-form-group row">
+                        <label class="col-sm-6 col-form-label ipd-label">Công đoạn</label>
+                        <div class="col-sm-6 pl-0">
+                            <select id="ddlProcess">
+                                <option value="0">Chọn công đoạn</option>
+                            </select>
+                        </div>
+                    </div>
+                    @* 9. Nhập số lượng thao tác *@
+                    <div class="ipd-form-group row">
+                        <label class="col-sm-6 col-form-label ipd-label">Số lượng thao tác</label>
+                        <div class="col-sm-6 pl-0">
+                            <input
+                                class="form-control"
+                                id="txtQuantity"
+                                type="text"
+                                placeholder="Nhập số lượng"
+                                onkeyup="enter(event,1);"
+                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                autocomplete="off"
+                            />
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+        <div class="col-sm-9">
+            <form>
+                <fieldset id="fs-error-list">
+                    <legend><i class="fas fa-list-ul ipd-icon"></i>Danh mục lỗi</legend>
+                    <div class="row">
+                        <div id="error-data-list01" class="col-sm-6"></div>
+                        <!-- implement here -->
+                        <div id="error-data-list02" class="col-sm-6"></div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-9">
+            <form id="otherErrForm" name="otherErrForm">
+                <fieldset>
+                    <legend id="lgErrForm"><i class="fas fa-exclamation-circle ipd-icon"></i>Ghi chú lỗi khác</legend>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="Mặt cắt không đạt" />1. Mặt cắt không đạt </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="Cháy cao su" />2. Cháy cao su </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="Dính sản phẩm" />3. Dính sản phẩm </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="Biến dạng lip" />4. Biến dạng lip </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="Đọng keo" />5. Đọng keo </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="Lò xo không đạt" />6. Lò xo không đạt </label>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-check">
+                                <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="Rỉ sét" />7. Rỉ sét </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="Bong tróc" />8. Bong tróc </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="Mạt sắt" />9. Mạt sắt </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="Lỗi liên quan lò xo" />10. Lỗi liên quan lò xo </label>
+                            </div>
+
+                            <div class="form-check">
+                                <label class="form-check-label"> <input type="checkbox" class="form-check-input" value="Lem mực chấm dấu" />11. Lem mực chấm dấu </label>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-10"></div>
+        <div class="col-sm-2">
+            <button id="btnSubmit" type="button" class="btn btn-primary"><i class="fas fa-save" style="margin-right: 5px;"></i>LƯU DỮ LIỆU</button>
+        </div>
+    </div>
+</div>
+
+<div class="loader" id="loader-4" style="display:none;">
+   <span></span>
+   <span></span>
+   <span></span>
+</div>
+<input type="hidden" id="operation-number" />
+<input type="hidden" id="txtUserId" value="@ViewBag.UserID" />
+<textarea id="txtNotes" name="99" placeholder="Nhập thông tin ghi chú" spellcheck="false" style="width: 99%; display:none" rows="2"></textarea>
+@* <div id="myAlert" class="alert alert-danger collapse mb-0">
+    <a id="linkClose" href="#" class="close" data-dismiss="alert">&times;</a>
+    <span id="txtMessage"></span>
+</div> *@
+
+
+<!-- Stackable -->
+<!-- Modal 1-->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-focus-on="button:first">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">CHÚ Ý</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span style="color: red;">BẠN CÓ CHẮC ĐÃ NHẬP ĐÚNG DỮ LIỆU?</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" data-tabindex="2">NO</button>
+                <button type="button" class="btn btn-outline-primary" id="btnSave" data-tabindex="1">YES</button>
+                <!-- <button class="btn btn-outline-primary" data-toggle="modal" href="#confirmModal2">YES</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal 2-->
+<div class="modal fade" id="continueModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-focus-on="button:first">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">CHÚ Ý</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span>BẠN CÓ MUỐN TIẾP TỤC KHÔNG?</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" id="btnNoContinue" data-tabindex="2">NO</button>
+                <button type="button" class="btn btn-outline-primary" id="btnContinue" data-tabindex="1">YES</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/InputDefect/InputDefect.js" asp-append-version="true"></script>
+<script src="~/js/InputDefect/notify.js"></script>
+

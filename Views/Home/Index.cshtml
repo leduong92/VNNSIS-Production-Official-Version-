@@ -1,0 +1,246 @@
+﻿@inject VNNSIS.Repositories.MenuMasterRepository menus
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link rel="stylesheet" href="~/css/Menu/menu.css" />
+<!-- start: Popup work center -->
+<div id="ModalLineNo" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style=" user-select: none;" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="font-weight: bold;">Choose work center (obligate)</h5>
+            </div>
+            <div id="ModalBodyLineNo" >
+                <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 12px; margin-bottom: 12px;">
+                    <div style=" font-size: 25px;">Section:</div>
+                    <div>
+                        <div class="dropdown">
+                            <a id="TopSection" style="width: 135px; font-weight: bold; color: white;" class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Choose section
+                                <span class="caret"></span> 
+                            </a>
+                            <ul id="SectionID" class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: 7rem;">
+                                <!-- Json draw -->
+                            </ul>
+                        </div>
+                    </div>
+                    <div style=" font-size: 25px;">Line no:</div>
+                    <div>
+                        <div class="dropdown">
+                            <a id="TopLine" style="width: 120px; font-weight: bold; color: white;" class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Choose line
+                                <span class="caret"></span> 
+                            </a>
+                            <div id="LineID" class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: 7rem;">
+                                <!-- Json draw -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnSaveLine" onclick="PushLine()" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End: Popup work center -->
+<!-- start: Popup Login -->
+<div>
+    <div style="justify-content: center; user-select: none; display: flex; flex-wrap: wrap;">
+        
+        @foreach(var menuNames in menus.GetMenuMaster().Where(n => n.ParentMenuID == "*").OrderBy(v => v.Order_id))
+        {
+            if(@menuNames.MenuClass == "")
+            {
+                <div class="cardFlex" onclick="MenuClick(@menuNames.MenuIdentity, '@menuNames.MenuName')" data-toggle="modal" data-target="#ModalMachine">
+                    <div class="card" data-toggle="tooltip"  title="@menuNames.MenuName_VN"  >
+                        <div class="card-header text-white" style="border-bottom-left-radius: 30px 20px;">@menuNames.Order_id. @menuNames.MenuName</div>
+                        <div class="card-horizontal">
+                            <div class="img-square-wrapper">
+                                <img src="~/images/Menu/@menuNames.MenuIMG" alt="Card image cap">
+                            </div>
+                            <div class="pl-2 pr-2 pt-2 pb-2">
+                                <p class="card-text">@menuNames.MenuText</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                if (@menuNames.Order_id == 1 || @menuNames.Order_id == 2)
+                {
+                    <div class="cardFlex" >  
+                        <a onclick="GetTitle('@menuNames.MenuName','@menuNames.UserRole','@menuNames.MenuURL','@menuNames.MenuFileName')" data-toggle="modal" data-target="#LoginMenu">
+                        <div class="card" data-toggle="tooltip"  title="@menuNames.MenuName_VN"  >
+                            <div class="card-header text-white" style="border-bottom-left-radius: 30px 20px;background-color: chocolate;">@menuNames.Order_id. @menuNames.MenuName</div>
+                            @* <div class="card-header text-white" style="border-bottom-left-radius: 30px 20px;">@menuNames.Order_id. @menuNames.MenuName</div> *@
+                            <div class="card-horizontal">
+                                <div class="img-square-wrapper">
+                                    <img src="~/images/Menu/@menuNames.MenuIMG" alt="Card image cap">
+                                </div>
+                                <div class="pl-2 pr-2 pt-2 pb-2">
+                                    <p class="card-text">@menuNames.MenuText</p>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        </a>
+                    </div>
+                }
+                else 
+                {
+                    <div class="cardFlex" >  
+                        <a onclick="GetTitle('@menuNames.MenuName','@menuNames.UserRole','@menuNames.MenuURL','@menuNames.MenuFileName')" data-toggle="modal" data-target="#LoginMenu">
+                        <div class="card" data-toggle="tooltip"  title="@menuNames.MenuName_VN"  >
+                            @* <div class="card-header text-white" style="border-bottom-left-radius: 30px 20px;background-color: chocolate;">@menuNames.Order_id. @menuNames.MenuName</div> *@
+                            <div class="card-header text-white" style="border-bottom-left-radius: 30px 20px;">@menuNames.Order_id. @menuNames.MenuName</div>
+                            <div class="card-horizontal">
+                                <div class="img-square-wrapper">
+                                    <img src="~/images/Menu/@menuNames.MenuIMG" alt="Card image cap">
+                                </div>
+                                <div class="pl-2 pr-2 pt-2 pb-2">
+                                    <p class="card-text">@menuNames.MenuText</p>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        </a>
+                    </div>
+                }
+                
+            }
+        }
+    </div>
+</div>
+<!--End: Popup Login -->
+<!--Start: Popup Machine -->
+<div id="ModalMachine" class="modal fade" role="dialog" style="top: 10%; user-select: none;" data-backdrop="static" data-keyboard="false"> <!--ID myModal pass through login.js -->
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 id="CardTitle" class="modal-title">...</h4> <!--ID CardTitle pass through login.js -->
+            </div>
+            <div id="cardContent" class="modal-body" style="display: flex; flex-wrap: wrap; justify-content: center;"> <!--ID myDIV pass through site.css -->
+                <!--automatically genarate by login.js -->
+            </div>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; margin: 0px;padding: 10px; flex-wrap: wrap;">
+                <div style="display: flex; font-size: 15px; padding: 2px; font-weight: bold;" >
+                    @* <span class="mark" style="background-color: rgb(134, 235, 201);">Chooses</span> *@
+                    <span class="mark" style="background-color: #32CD32;" data-toggle="tooltip" title="Máy đang hoạt động">Running</span>
+                    <span class="mark" style="background-color: DeepSkyBlue;" data-toggle="tooltip" title="Chọn máy">Chooses</span>
+                    <span class="mark" style="background-color: #D2691E;" data-toggle="tooltip" title="Máy over time">Pre-heat over time</span>
+                </div>
+                <div id="divRstSup" style="width: 60%; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; display: none"> 
+                    <div class="dropdown">
+                        <a id="RstMenu" style="width: 200px; font-weight: bold; color: white;" class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Chooses reason
+                            <span class="caret"></span> 
+                        </a>
+                        <ul id="RstID" class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: 7rem;">
+                            <!-- Json draw -->
+                        </ul>
+                    </div>
+                    <button id="BtnRstSup" type="button" class="btn btn-info btn-lg">Confirm</button>
+                </div>
+                <div id="divAccept">
+                    <button id="BtnAccept" type="button" class="btn btn-info btn-lg">Accept</button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div id="alert-area" class="alert-area" style="border-radius: 7px; z-index: 9999"></div>
+<!--End: Popup Machine -->
+
+<!--Start: Popup Login -->
+<div class="modal fade" id="LoginMenu" style="top: 10%; user-select: none;">
+    <div class="modal-dialog">
+        <div class="modal-content" style="box-shadow: 5px 5px 10px rgba(0,0,0,0.3);">
+            <div style="display: flex;">
+                <div class="loginLogo">
+                    <img src="/images/Logo/logo_nok.png" alt="Icon User" height="50px">
+                    </div>
+                <div class="loginContent">
+                    <h2 style="margin-bottom: 0px;"><b>Đăng Nhập</b></h2>
+                    &#9827; &#9827; &#9827;
+                    <h5 id="title" style="font-size: 30px;"></h5>
+                    <input class="form-control" id="user-id" autocomplete="off" required="" type="text" placeholder="Nhập mã số nhân viên" onkeypress="return runButton(event)" autofocus>
+                    <div>
+                        <button class="btn btn-outline-primary btn-block" type="submit" id="btnCloseModal" onclick="LogIn();" ><i class="fas fa-unlock-alt"></i> Login</button>	
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+ 
+</div>
+<!--End: Popup Login -->
+
+<div id='whatsapp-chat' class='pophide'>
+   <div class='header-chat'>
+      <div class='head-home'>
+         <h3>Hello!</h3>
+         <p>Welcome to VNN Smart Information System</p>
+      </div>
+      <div class='get-new pophide'>
+         <div id='get-label'></div>
+         <div id='get-nama'></div>
+      </div>
+   </div>
+   <div class='home-chat'>
+      <!-- Info Contact Start -->
+      <a class='informasi' title='Going to use in future'>
+         <div class='info-avatar'><img src='~/images/menu/supportmale.png'></div>
+         <div class='info-chat'>
+            <span class='chat-label'>Support</span>
+            <span class='chat-nama'>Customer Service 1</span>
+         </div>
+      </a>
+      <!-- Info Contact End -->
+      <!-- Info Contact Start -->
+      <a class='informasi' title='Going to use in future'>
+         <div class='info-avatar'><img src='~/images/menu/supportfemale.png'></div>
+         <div class='info-chat'>
+            <span class='chat-label'>Support</span>
+            <span class='chat-nama'>Customer Service 2</span>
+         </div>
+      </a>
+      <!-- Info Contact End -->
+      <div class='blanter-msg'>Please call us to <b>Etx: 223 </b>for any help. <br>Copyright <i>&#169;</i> VNN Software team</div>
+   </div>
+  
+   <a class='close-chat' style="color: white; cursor: pointer;">×</a>
+</div>
+
+<a class='blantershow-chat' title='Show help' style="color: white; cursor: pointer;" ><i class="fa fa-yelp" style="margin-right: 5px;"></i>How can I help you?</a> 
+
+@* Khong duoc xoa doan code nay *@
+@* <a href="#" class="float" data-toggle="tooltip" title="Hỗ trợ kỹ thuật">
+    <i class="fa fa-plus my-float"></i>
+</a> *@
+
+@* <a class="float" id="menu-share" style="cursor: pointer; color: white;" >
+    <i class="fa fa-share my-float"></i>
+</a>
+<ul class="ulFloating" >
+    <li class="ulLiFloating">
+        <a href="#">
+            <i class="fa fa-facebook my-float"></i>
+        </a>
+    </li>
+    <li class="ulLiFloating">
+        <a href="#">
+            <i class="fa fa-google-plus my-float"></i>
+        </a>
+    </li>
+    <li class="ulLiFloating">
+        <a href="#">
+            <i class="fa fa-twitter my-float"></i>
+        </a>
+    </li>
+</ul> *@
+@* end Khong duoc xoa doan code nay *@
+<script src="~/js/Menu/menu.js"></script>

@@ -1,0 +1,65 @@
+@model IEnumerable<VNNSIS.Models.MoldWashingModel>
+@{
+    ViewData["Title"] = "Mold Page";
+}
+@{
+    Layout = "/Views/shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/MoldWashing/MoldWashing.css" />
+<h2 style="margin-left: 10px;"><i class="fa fa-coins" style="margin-right:5px;"></i>Washing Mold</h2>
+<hr>
+
+@* <div style="margin: 12px; box-shadow: 0 0 2px rgba(0, 123, 255, 0.5);" > *@
+<div style="margin: 12px;">
+    <table id="table_id" class="display" style="width: 100%; text-align: center; " >
+        <thead style="background-color: #099CE6; color: white; user-select: none;">
+            <tr style="font-weight:bold;">
+                <td>Wc</td>
+                <td>Material</td>
+                <td>Type</td>
+                <td>Mold Code</td>
+                <td>Mold Tag</td>
+                <td style="width: 5rem;">Change Mold</td>
+                <td>Status</td>
+                <td>Entry Date</td>
+                <td>Entry Time</td>
+                <td>Receive Date</td>
+                <td>Receive Time</td>
+                <td>Start Time</td>
+                <td>Estimate Time</td>
+                <td>Actual Time</td>
+                <td>Delivery Time</td>
+                <td>Judgment</td>
+            </tr>
+        </thead>
+        <tbody style="cursor: pointer; user-select: none;">
+            <!-- Usr Datatable.js -->            
+        </tbody>
+    </table>
+
+</div>
+
+<!--Start: Popup details -->
+<div class="modal fade" id="moldDetails" style="top: 10%; user-select: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="box-shadow: 5px 5px 10px rgba(0,0,0,0.3);">
+            <div style="display: flex; flex-direction: column;">
+                <div>
+                    <h2 style="margin-bottom: 0px; text-align: center;"><b>Chi tiết rửa khuôn</b></h2>
+                    <h5 id="title" style="font-size: 30px;"></h5>
+                </div>
+                <div style="display: flex;">
+                    <input class="form-control" autocomplete="off" required="" type="text" autofocus>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+ 
+</div>
+<!--End: Popup details -->
+
+
+<script src="~/js/MoldWashing/MoldWashing.js" asp-append-version="true"></script>
+<script type="text/javascript" charset="utf8" src="~/js/MoldWashing/dataTables.js"></script>

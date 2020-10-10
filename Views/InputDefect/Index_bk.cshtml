@@ -1,0 +1,177 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<link rel="stylesheet" href="~/css/InputDefect/InputDefect.css" />
+<link rel="stylesheet" href="~/css/InputDefect/MultiCheckbox.css" />
+
+
+<div class="container">
+    <div id="fade"></div>
+    <div id="model" style="display:none;">
+        <img style="width: 50%; height: 50%; margin: 25%;" src="~/images/InputDefect/35.gif" /> 
+    </div>
+    <div class="div-title">CHƯƠNG TRÌNH NHẬP DỮ LIỆU</div>
+    <hr class="style7">
+    <form>
+        <fieldset class="box-shadow">
+            <legend style="color:tomato"><h5><i class="fas fa-info" style="margin-right:5px;"></i>Thông tin dữ liệu <input type="hidden" id="txtUserId" value="@ViewBag.UserID"></h5></legend>
+            <div class="fieldset-main">
+                <div class="div-group-1">
+                        <label class="label-group">Barcode</label>
+                        <input class="input-width" id="txtBarcode" type="text" placeholder="Quét mã vạch" style="text-transform: uppercase;"  autocomplete="off" autofocus>
+                </div>
+
+                <div class="div-group-1">
+                    <label class="label-group">Job No</label>
+                    <input class="input-width" id="txtJobOrderNo" name="input-disable"  readonly="readonly" type="text"  disabled>
+                </div>
+
+                <div class="div-group-1">
+                    <label class="label-group">Lot No</label>
+                    <input class="input-width" id="txtLot" name="input-disable" readonly="readonly" type="text"  disabled>
+                </div>
+
+                <div class="div-group-1">
+                    <label class="label-group">Item</label>
+                    <input class="input-width" id="txtItem" name="input-disable" readonly="readonly" type="text"  disabled>
+                </div>
+
+                <div class="div-group-2">
+                    <label class="label-group">Ngày sản xuất</label>
+                    <input id="txtStartDate" class="input-width" name="input-disable" readonly="readonly" type="date" style= "border: 0.5px solid;" disabled>
+                </div>
+
+                <div class="div-group-2">
+                    <label class="label-group">Ngày kết thúc</label>
+                    <input id="txtEndDate" class="input-width" name="input-disable" readonly="readonly" type="date" style= "border: 0.5px solid;" disabled>
+                </div>
+                <div class="div-group-2">
+                    <label class="label-group">Mã số thiết bị/bàn</label>
+                    <input class="input-width" id="txtMachineNo" name="input-disable" readonly="readonly" type="text"  disabled>
+                </div> 
+            </div>
+        </fieldset>
+    </form>
+    <form>
+        <fieldset  class="box-shadow">
+            <legend style="color:tomato"><h5><i class="fas fa-database" style="margin-right:5px;"></i>Thông tin nhập liệu</h5></legend>
+                <div  class="fieldset-main">
+                    <div class="div-group-1">
+                    <label class="label-group">Công đoạn</label>
+
+                    <select class="input-width" id="ddlProcess">
+                        <option value="0">Chọn công đoạn</option>
+                        <!-- implement here -->
+                    </select>
+                </div>
+                    <div class="div-group-2">
+                        <label class="label-group">Số lượng thao tác</label>
+                        <input class="input-width" id="txtQuantity" type="text" placeholder="Nhập số lượng" onkeyup="enter(event,1);" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autocomplete="off" />
+                    </div>
+                </div>
+                
+                <form>
+                    <fieldset style="text-align: center;">
+                        <legend style="font-size: 25px; color:tomato">Danh mục lỗi</legend>
+                        <div id="error-data" style="display: flex; flex-wrap: wrap">
+                            <!-- implement here -->
+                        </div>
+                    </fieldset>
+                </form>
+                @* <span style="font-weight:bold; padding-left:10px"><i class="fas fa-edit"></i>Ghi chú nội dung lỗi khác</span> *@
+                <div style="padding-left:10px">   
+                  <select id="lstNotes">
+                      <option value="Mặt cắt không đạt">Mặt cắt không đạt</option>
+                      <option value="Cháy cao su">Cháy cao su</option>
+                      <option value="Dính sản phẩm">Dính sản phẩm</option>
+                      <option value="Biến dạng lip">Biến dạng lip</option>
+                      <option value="Đọng keo">Đọng keo</option>
+                      <option value="Lò xo không đạt">Lò xo không đạt</option>
+                      <option value="Rỉ sét">Rỉ sét</option>
+                      <option value="Bong tróc">Bong tróc</option>
+                      <option value="Mạt sắt">Mạt sắt</option>
+                      <option value="Lỗi liên quan lò xo">Lỗi liên quan lò xo</option>
+                      <option value="Lem mực chấm dấu">Lem mực chấm dấu</option>
+                  </select>
+                  @* <input type="button" id="btnget" value="Get Selected Values" /> *@
+                  <textarea id="txtNotes" name="99" placeholder="Nhập thông tin ghi chú"  spellcheck="false" style="width:99%; display:none" rows="2" ></textarea>
+                </div>
+        </fieldset>
+    </form>
+
+    <form>
+        <fieldset  class="box-shadow">
+            <!-- <legend></legend> -->
+             <input type="hidden" id="operation-number">
+            <table style="width: 100%;">
+              <tr>
+                <td style="width: 80%;">
+                    <div id="myAlert" class="alert alert-danger collapse mb-0" >
+                      <a id="linkClose" href="#" class="close" data-dismiss="alert">&times;</a>
+                      <span id="txtMessage"></span>
+                    </div>
+                </td>
+                <td style="width: 20%;">
+                   <button id="btnSubmit" type="button" class="btn btn-outline-primary btn-block"><i class="fas fa-save" style="margin-right: 5px;"></i>LƯU DỮ LIỆU</button>
+                </td>
+              </tr>
+            </table>
+
+            @* <div style="display: flex" >
+                <!-- <div id="operation-number" style="text-align: center; width: 20%; font-size: 18px; margin: 5px;"></div> -->
+                <input type="hidden" id="operation-number">
+                <div id="div-notfi" style="text-align: center; width: 80%; font-size: 18px; margin: 5px;"></div>
+                <div style="width: 20%; text-align: center;">
+                    <button id="btnSubmit" type="button" class="btn btn-outline-primary btn-block" style="width: 100%;"><i class="fas fa-save" style="margin-right: 5px;"></i>LƯU DỮ LIỆU</button>
+                </div>
+            </div> *@
+            
+        </fieldset>
+    </form>
+</div>
+
+<!-- Stackable -->
+<!-- Modal 1-->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-focus-on="button:first">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">CHÚ Ý</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span style="color:red">BẠN CÓ CHẮC ĐÃ NHẬP ĐÚNG DỮ LIỆU?</span>  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal" data-tabindex="2">NO</button>
+        <button type="button" class="btn btn-outline-primary" id="btnSave" data-tabindex="1">YES</button>
+        <!-- <button class="btn btn-outline-primary" data-toggle="modal" href="#confirmModal2">YES</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal 2-->
+<div class="modal fade" id="continueModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-focus-on="button:first">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">CHÚ Ý</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <span>BẠN CÓ MUỐN TIẾP TỤC KHÔNG?</span>  
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="btnNoContinue" data-tabindex="2">NO</button>
+        <button type="button" class="btn btn-outline-primary" id="btnContinue" data-tabindex="1">YES</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="~/js/InputDefect/InputDefect.js" asp-append-version="true"></script>
+<script src="~/js/InputDefect/MultiCheckbox.js"></script>
