@@ -211,7 +211,7 @@ namespace VNNSIS.Controllers
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex);
-                        return Json(new { error = "Lỗi đọc PLC", success = false });
+                        return Json(new { error = "Lỗi đọc PLC", plc = "",  success = false });
                     }
                 }
             }
